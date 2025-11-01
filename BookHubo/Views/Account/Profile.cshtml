@@ -1,0 +1,87 @@
+@model BookHubo.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Thông tin cá nhân</h2>
+
+        <!-- Profile Update Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Cập nhật thông tin</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Profile" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" readonly disabled />
+                        <small class="text-muted">Email không thể thay đổi</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label"></label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ShippingAddress" class="form-label"></label>
+                        <textarea asp-for="ShippingAddress" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change Password Form -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Đổi mật khẩu</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="ChangePassword" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label for="CurrentPassword" class="form-label">Mật khẩu hiện tại</label>
+                        <input type="password" name="CurrentPassword" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="NewPassword" class="form-label">Mật khẩu mới</label>
+                        <input type="password" name="NewPassword" class="form-control" minlength="6" required />
+                        <small class="text-muted">Tối thiểu 6 ký tự</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ConfirmNewPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                        <input type="password" name="ConfirmNewPassword" class="form-control" minlength="6" required />
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

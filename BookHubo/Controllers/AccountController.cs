@@ -136,5 +136,147 @@ namespace BookHubo.Controllers
             TempData["SuccessMessage"] = "Đăng xuất thành công!";
             return RedirectToAction("Index", "Home");
         }
+
+        // GET: /Account/Profile
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var user = await _context.Users.FindAsync(userId.Value);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var model = new ProfileViewModel
+            {
+                Email = user.Email,
+                FullName = user.FullName,
+                PhoneNumber = user.PhoneNumber,
+                ShippingAddress = user.ShippingAddress
+            };
+
+            return View(model);
+        }
+
+        // POST: /Account/Profile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                // Re-set email (read-only)
+                var currentUser = await _context.Users.FindAsync(userId.Value);
+                if (currentUser != null)
+                {
+                    model.Email = currentUser.Email;
+                }
+                return View(model);
+            }
+
+            var user = await _context.Users.FindAsync(userId.Value);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            user.FullName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.ShippingAddress = model.ShippingAddress;
+
+            await _context.SaveChangesAsync();
+
+            // Update session
+            HttpContext.Session.SetString("UserName", user.FullName);
+
+            TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
+            return RedirectToAction("Profile");
+        }
+
+        // POST: /Account/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Vui lòng kiểm tra lại thông tin!";
+                return RedirectToAction("Profile");
+            }
+
+            var user = await _context.Users.FindAsync(userId.Value);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Verify current password
+            if (!BCrypt.Net.BCrypt.Verify(model.CurrentPassword, user.PasswordHash))
+            {
+                TempData["ErrorMessage"] = "Mật khẩu hiện tại không đúng!";
+                return RedirectToAction("Profile");
+            }
+
+            // Update password
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Đổi mật khẩu thành công!";
+            return RedirectToAction("Profile");
+        }
+
+        // GET: /Account/Stats
+        [HttpGet]
+        public async Task<IActionResult> Stats()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var stats = new StatsViewModel
+            {
+                // Total active listings
+                TotalActiveListings = await _context.Books
+                    .CountAsync(b => b.SellerId == userId.Value && b.IsActive),
+
+                // Total sold (count OrderItems)
+                TotalSold = await _context.OrderItems
+                    .Where(oi => oi.SellerId == userId.Value)
+                    .SumAsync(oi => oi.Quantity),
+
+                // Total revenue
+                TotalRevenue = await _context.OrderItems
+                    .Where(oi => oi.SellerId == userId.Value)
+                    .SumAsync(oi => oi.PriceAtPurchase * oi.Quantity),
+
+                // Average rating (from User table)
+                AverageRating = (await _context.Users.FindAsync(userId.Value))?.AverageRating ?? 0,
+
+                // Total reviews
+                TotalReviews = (await _context.Users.FindAsync(userId.Value))?.TotalReviews ?? 0
+            };
+
+            return View(stats);
+        }
     }
 }

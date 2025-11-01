@@ -31,6 +31,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Sales" asp-action="Index">Bán hàng</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Stats">Thống kê</a>
+                            </li>
                         }
                     </ul>
                     <ul class="navbar-nav">
@@ -38,6 +41,9 @@
                         {
                             <li class="nav-item">
                                 <span class="nav-link text-dark">Xin chào, <strong>@Context.Session.GetString("UserName")</strong></span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile">Hồ sơ</a>
                             </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
