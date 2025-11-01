@@ -83,6 +83,15 @@
                             <small class="text-muted"><i class="bi bi-person"></i> @book.Author</small><br>
                             <span class="badge bg-info">@book.Condition</span>
                         </p>
+                        @if (book.TotalReviews > 0)
+                        {
+                            <p class="mb-2">
+                                <span class="text-warning">
+                                    <i class="bi bi-star-fill"></i> @book.AverageRating.ToString("0.0")
+                                </span>
+                                <small class="text-muted">(@book.TotalReviews)</small>
+                            </p>
+                        }
                         <p class="text-success fw-bold fs-5">@book.Price.ToString("N0") VNĐ</p>
                         <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-primary w-100">
                             Xem chi tiết

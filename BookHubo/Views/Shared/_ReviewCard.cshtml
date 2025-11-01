@@ -1,0 +1,46 @@
+@model BookHubo.Models.Review
+@{
+    var showBookTitle = ViewData["ShowBookTitle"] as bool? ?? false;
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+                <h6 class="mb-1">@Model.Buyer?.FullName</h6>
+                <small class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+            </div>
+            <div class="text-warning fs-5">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= Model.Rating)
+                    {
+                        <span>★</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">☆</span>
+                    }
+                }
+            </div>
+        </div>
+
+        @if (showBookTitle && Model.Book != null)
+        {
+            <p class="mb-2">
+                <small class="text-muted">
+                    <i class="bi bi-book"></i> Mua sách: <strong>@Model.Book.Title</strong>
+                </small>
+            </p>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Comment))
+        {
+            <p class="mb-0">@Model.Comment</p>
+        }
+        else
+        {
+            <p class="mb-0 text-muted fst-italic">Người mua không để lại nhận xét</p>
+        }
+    </div>
+</div>

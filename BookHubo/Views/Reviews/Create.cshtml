@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Đánh giá";
+    var orderItem = ViewBag.OrderItem as BookHubo.Models.OrderItem;
+}
+
+<div class="mb-3">
+    <a asp-controller="Orders" asp-action="Details" asp-route-id="@orderItem!.OrderId" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-star"></i> Đánh giá sản phẩm</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-4 p-3 bg-light rounded">
+                    <h6>Thông tin đơn hàng</h6>
+                    <p class="mb-1"><strong>Sách:</strong> @orderItem.Book?.Title</p>
+                    <p class="mb-1"><strong>Người bán:</strong> @orderItem.Seller?.FullName</p>
+                    <p class="mb-0"><strong>Số lượng:</strong> @orderItem.Quantity</p>
+                </div>
+
+                <form asp-action="Create" asp-route-orderItemId="@orderItem.OrderItemId" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-4">
+                        <label class="form-label"><strong>Đánh giá của bạn <span class="text-danger">*</span></strong></label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5" title="5 sao">★</label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4" title="4 sao">★</label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3" title="3 sao">★</label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2" title="2 sao">★</label>
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1" title="1 sao">★</label>
+                        </div>
+                        <small class="text-muted">Nhấn vào sao để đánh giá</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="comment" class="form-label"><strong>Nhận xét (không bắt buộc)</strong></label>
+                        <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Chia sẻ trải nghiệm mua hàng của bạn..."></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-send"></i> Gửi đánh giá
+                        </button>
+                        <a asp-controller="Orders" asp-action="Details" asp-route-id="@orderItem.OrderId" class="btn btn-outline-secondary">
+                            Hủy
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+            font-size: 2.5rem;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #ffc107;
+        }
+    </style>
+}

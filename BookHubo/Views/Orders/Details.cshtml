@@ -60,7 +60,17 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@item.Seller?.FullName</td>
+                            <td>
+                                <a asp-controller="Seller" asp-action="PublicProfile" asp-route-id="@item.SellerId" class="text-decoration-none">
+                                    @item.Seller?.FullName
+                                    @if (item.Seller?.AverageRating > 0)
+                                    {
+                                        <span class="text-warning">
+                                            <i class="bi bi-star-fill"></i> @item.Seller.AverageRating.ToString("0.0")
+                                        </span>
+                                    }
+                                </a>
+                            </td>
                             <td class="text-center">@item.Quantity</td>
                             <td class="text-end">@item.PriceAtPurchase.ToString("N0") VNĐ</td>
                             <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("N0")) VNĐ</td>
@@ -99,7 +109,7 @@
                                 }
                                 @if (item.Status == "Completed")
                                 {
-                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                    <a asp-controller="Reviews" asp-action="Create" asp-route-orderItemId="@item.OrderItemId" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-star"></i> Đánh giá
                                     </a>
                                 }

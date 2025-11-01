@@ -336,6 +336,17 @@ namespace BookHubo.Controllers
                 return NotFound();
             }
 
+            // Get first 5 reviews for this book
+            var reviews = await _context.Reviews
+                .Include(r => r.Buyer)
+                .Where(r => r.BookId == id)
+                .OrderByDescending(r => r.CreatedAt)
+                .Take(5)
+                .ToListAsync();
+
+            ViewBag.Reviews = reviews;
+            ViewBag.HasMoreReviews = book.TotalReviews > 5;
+
             // Get related books (same category, exclude current)
             var relatedBooks = await _context.Books
                 .Include(b => b.Seller)
@@ -347,6 +358,28 @@ namespace BookHubo.Controllers
             ViewBag.RelatedBooks = relatedBooks;
 
             return View(book);
+        }
+
+        // API: Load more reviews for a book
+        [HttpGet]
+        public async Task<IActionResult> LoadMoreReviews(int bookId, int skip = 0, int take = 5)
+        {
+            var reviews = await _context.Reviews
+                .Include(r => r.Buyer)
+                .Where(r => r.BookId == bookId)
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip(skip)
+                .Take(take)
+                .Select(r => new
+                {
+                    buyerName = r.Buyer!.FullName,
+                    rating = r.Rating,
+                    comment = r.Comment,
+                    createdAt = r.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                })
+                .ToListAsync();
+
+            return Json(reviews);
         }
     }
 }

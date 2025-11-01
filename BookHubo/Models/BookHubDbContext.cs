@@ -13,6 +13,7 @@ namespace BookHubo.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,11 @@ namespace BookHubo.Models
             // CartItem indexes
             modelBuilder.Entity<CartItem>().HasIndex(ci => ci.UserId);
             modelBuilder.Entity<CartItem>().HasIndex(ci => ci.BookId);
+
+            // Review indexes
+            modelBuilder.Entity<Review>().HasIndex(r => r.SellerId);
+            modelBuilder.Entity<Review>().HasIndex(r => r.BuyerId);
+            modelBuilder.Entity<Review>().HasIndex(r => r.OrderItemId).IsUnique();
         }
     }
 }

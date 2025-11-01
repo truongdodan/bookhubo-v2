@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = Model.Title;
     var relatedBooks = ViewBag.RelatedBooks as IEnumerable<BookHubo.Models.Book>;
+    var reviews = ViewBag.Reviews as List<BookHubo.Models.Review>;
+    var hasMoreReviews = ViewBag.HasMoreReviews ?? false;
 }
 
 <div class="mb-3">
@@ -68,14 +70,26 @@
                 <div class="mb-4 p-3 bg-light rounded">
                     <p class="text-muted mb-1">Bán bởi</p>
                     <p class="fs-5 fw-bold mb-0">
-                        @Model.Seller?.FullName
-                        @if (Model.Seller?.AverageRating > 0)
-                        {
-                            <span class="text-warning">
-                                <i class="bi bi-star-fill"></i> @Model.Seller.AverageRating.ToString("0.0")
-                            </span>
-                        }
+                        <a asp-controller="Seller" asp-action="PublicProfile" asp-route-id="@Model.SellerId" class="text-decoration-none text-dark">
+                            @Model.Seller?.FullName
+                            @if (Model.Seller?.AverageRating > 0)
+                            {
+                                <span class="text-warning">
+                                    <i class="bi bi-star-fill"></i> @Model.Seller.AverageRating.ToString("0.0")
+                                </span>
+                            }
+                        </a>
                     </p>
+                    @if (Model.Seller?.TotalReviews > 0)
+                    {
+                        <p class="mb-0">
+                            <small class="text-muted">
+                                <a asp-controller="Seller" asp-action="PublicProfile" asp-route-id="@Model.SellerId" class="text-decoration-none">
+                                    Xem @Model.Seller.TotalReviews đánh giá
+                                </a>
+                            </small>
+                        </p>
+                    }
                 </div>
 
                 <!-- Add to Cart Button -->
@@ -107,6 +121,71 @@
                 <p class="text-muted" style="white-space: pre-line;">@Model.Description</p>
             </div>
         }
+
+        <!-- Reviews Section -->
+        <hr class="my-4">
+        <div>
+            <h4 class="mb-3">
+                <i class="bi bi-star"></i> Đánh giá sản phẩm
+                @if (Model.TotalReviews > 0)
+                {
+                    <span class="fs-6 text-muted">
+                        (@Model.TotalReviews đánh giá)
+                    </span>
+                }
+            </h4>
+
+            @if (Model.TotalReviews > 0)
+            {
+                <div class="mb-4 p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <div class="me-4">
+                            <div class="display-4 fw-bold text-warning">@Model.AverageRating.ToString("0.0")</div>
+                            <div class="text-warning fs-5">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= (double)Model.AverageRating)
+                                    {
+                                        <span>★</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">☆</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-0 text-muted">Dựa trên @Model.TotalReviews đánh giá</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="reviews-container">
+                    @foreach (var review in reviews!)
+                    {
+                        <div class="col-12 mb-3">
+                            <partial name="_ReviewCard" model="review" />
+                        </div>
+                    }
+                </div>
+
+                @if (hasMoreReviews)
+                {
+                    <div class="text-center mt-3">
+                        <button id="load-more-btn" class="btn btn-outline-primary" onclick="loadMoreReviews()">
+                            <i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá
+                        </button>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-chat-left-text"></i> Chưa có đánh giá nào cho sản phẩm này
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -146,3 +225,80 @@
         </div>
     </div>
 }
+
+@section Scripts {
+    <script>
+        let currentSkip = 5; // Already loaded 5 reviews
+        const bookId = @Model.BookId;
+
+        async function loadMoreReviews() {
+            const btn = document.getElementById('load-more-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang tải...';
+
+            try {
+                const response = await fetch(`/Books/LoadMoreReviews?bookId=${bookId}&skip=${currentSkip}&take=5`);
+                const reviews = await response.json();
+
+                if (reviews.length > 0) {
+                    const container = document.getElementById('reviews-container');
+
+                    reviews.forEach(review => {
+                        const reviewHtml = `
+                            <div class="col-12 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1">${review.buyerName}</h6>
+                                                <small class="text-muted">${review.createdAt}</small>
+                                            </div>
+                                            <div class="text-warning fs-5">
+                                                ${generateStars(review.rating)}
+                                            </div>
+                                        </div>
+                                        ${review.comment ?
+                                            `<p class="mb-0">${review.comment}</p>` :
+                                            '<p class="mb-0 text-muted fst-italic">Người mua không để lại nhận xét</p>'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', reviewHtml);
+                    });
+
+                    currentSkip += reviews.length;
+
+                    // Check if there are more reviews
+                    if (currentSkip >= @Model.TotalReviews) {
+                        btn.remove();
+                    } else {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá';
+                    }
+                } else {
+                    btn.remove();
+                }
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá';
+                alert('Có lỗi xảy ra khi tải đánh giá');
+            }
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<span>★</span>';
+                } else {
+                    stars += '<span class="text-muted">☆</span>';
+                }
+            }
+            return stars;
+        }
+    </script>
+}
+
