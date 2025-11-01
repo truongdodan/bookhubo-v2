@@ -1,0 +1,76 @@
+@model List<BookHubo.Models.User>
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại Dashboard
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="bi bi-people"></i> Quản lý người dùng</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Họ tên</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr id="user-row-@user.UserId">
+                            <td>@user.UserId</td>
+                            <td>@user.Email</td>
+                            <td>@user.FullName</td>
+                            <td>
+                                @if (user.Role == "Admin")
+                                {
+                                    <span class="badge bg-danger">@user.Role</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@user.Role</span>
+                                }
+                            </td>
+                            <td>@user.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">
+                                @if (user.Role != "Admin")
+                                {
+                                    <button class="btn btn-sm btn-danger" onclick="deleteUser(@user.UserId, '@user.Email')">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Không thể xóa Admin</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Không có người dùng nào
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin.js"></script>
+}
