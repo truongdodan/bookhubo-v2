@@ -68,14 +68,26 @@
                 <div class="mb-4 p-3 bg-light rounded">
                     <p class="text-muted mb-1">Bán bởi</p>
                     <p class="fs-5 fw-bold mb-0">
-                        @Model.Seller?.FullName
-                        @if (Model.Seller?.AverageRating > 0)
-                        {
-                            <span class="text-warning">
-                                <i class="bi bi-star-fill"></i> @Model.Seller.AverageRating.ToString("0.0")
-                            </span>
-                        }
+                        <a asp-controller="Seller" asp-action="PublicProfile" asp-route-id="@Model.SellerId" class="text-decoration-none text-dark">
+                            @Model.Seller?.FullName
+                            @if (Model.Seller?.AverageRating > 0)
+                            {
+                                <span class="text-warning">
+                                    <i class="bi bi-star-fill"></i> @Model.Seller.AverageRating.ToString("0.0")
+                                </span>
+                            }
+                        </a>
                     </p>
+                    @if (Model.Seller?.TotalReviews > 0)
+                    {
+                        <p class="mb-0">
+                            <small class="text-muted">
+                                <a asp-controller="Seller" asp-action="PublicProfile" asp-route-id="@Model.SellerId" class="text-decoration-none">
+                                    Xem @Model.Seller.TotalReviews đánh giá
+                                </a>
+                            </small>
+                        </p>
+                    }
                 </div>
 
                 <!-- Add to Cart Button -->
