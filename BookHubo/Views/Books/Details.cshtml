@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = Model.Title;
     var relatedBooks = ViewBag.RelatedBooks as IEnumerable<BookHubo.Models.Book>;
+    var reviews = ViewBag.Reviews as List<BookHubo.Models.Review>;
 }
 
 <div class="mb-3">
@@ -119,6 +120,62 @@
                 <p class="text-muted" style="white-space: pre-line;">@Model.Description</p>
             </div>
         }
+
+        <!-- Reviews Section -->
+        <hr class="my-4">
+        <div>
+            <h4 class="mb-3">
+                <i class="bi bi-star"></i> Đánh giá sản phẩm
+                @if (Model.TotalReviews > 0)
+                {
+                    <span class="fs-6 text-muted">
+                        (@Model.TotalReviews đánh giá)
+                    </span>
+                }
+            </h4>
+
+            @if (Model.TotalReviews > 0)
+            {
+                <div class="mb-4 p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <div class="me-4">
+                            <div class="display-4 fw-bold text-warning">@Model.AverageRating.ToString("0.0")</div>
+                            <div class="text-warning fs-5">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= (double)Model.AverageRating)
+                                    {
+                                        <span>★</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">☆</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mb-0 text-muted">Dựa trên @Model.TotalReviews đánh giá</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @foreach (var review in reviews!)
+                    {
+                        <div class="col-12 mb-3">
+                            <partial name="_ReviewCard" model="review" />
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-chat-left-text"></i> Chưa có đánh giá nào cho sản phẩm này
+                </div>
+            }
+        </div>
     </div>
 </div>
 

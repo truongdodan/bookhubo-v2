@@ -336,6 +336,15 @@ namespace BookHubo.Controllers
                 return NotFound();
             }
 
+            // Get reviews for this book
+            var reviews = await _context.Reviews
+                .Include(r => r.Buyer)
+                .Where(r => r.BookId == id)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.Reviews = reviews;
+
             // Get related books (same category, exclude current)
             var relatedBooks = await _context.Books
                 .Include(b => b.Seller)

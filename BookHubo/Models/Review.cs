@@ -18,9 +18,8 @@ namespace BookHubo.Models
         [Column("buyerid")]
         public int BuyerId { get; set; }
 
-        [Required]
         [Column("sellerid")]
-        public int SellerId { get; set; }
+        public int? SellerId { get; set; }
 
         [Required]
         [Column("bookid")]

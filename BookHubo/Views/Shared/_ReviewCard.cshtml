@@ -22,15 +22,6 @@
             </div>
         </div>
 
-        @if (Model.OrderItem?.Book != null)
-        {
-            <p class="mb-2">
-                <small class="text-muted">
-                    <i class="bi bi-book"></i> Mua sách: <strong>@Model.OrderItem.Book.Title</strong>
-                </small>
-            </p>
-        }
-
         @if (!string.IsNullOrEmpty(Model.Comment))
         {
             <p class="mb-0">@Model.Comment</p>

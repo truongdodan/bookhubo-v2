@@ -70,8 +70,16 @@ namespace BookHubo.Models
         [Column("createdat")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        [Column("averagerating")]
+        public decimal AverageRating { get; set; } = 0;
+
+        [Column("totalreviews")]
+        public int TotalReviews { get; set; } = 0;
+
         // Navigation property
         [ForeignKey("SellerId")]
         public User? Seller { get; set; }
+
+        public ICollection<Review>? Reviews { get; set; }
     }
 }

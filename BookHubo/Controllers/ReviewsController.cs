@@ -127,25 +127,25 @@ namespace BookHubo.Controllers
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            // Update seller's rating
-            await UpdateSellerRating(orderItem.SellerId);
+            // Update book's rating
+            await UpdateBookRating(orderItem.BookId);
 
             TempData["SuccessMessage"] = "Đã gửi đánh giá thành công!";
-            return RedirectToAction("Details", "Orders", new { id = orderItem.OrderId });
+            return RedirectToAction("Details", "Books", new { id = orderItem.BookId });
         }
 
-        private async Task UpdateSellerRating(int sellerId)
+        private async Task UpdateBookRating(int bookId)
         {
-            var seller = await _context.Users.FindAsync(sellerId);
-            if (seller == null) return;
+            var book = await _context.Books.FindAsync(bookId);
+            if (book == null) return;
 
-            // Calculate average rating
+            // Calculate average rating for this book
             var reviews = await _context.Reviews
-                .Where(r => r.SellerId == sellerId)
+                .Where(r => r.BookId == bookId)
                 .ToListAsync();
 
-            seller.TotalReviews = reviews.Count;
-            seller.AverageRating = reviews.Count > 0
+            book.TotalReviews = reviews.Count;
+            book.AverageRating = reviews.Count > 0
                 ? (decimal)reviews.Average(r => r.Rating)
                 : 0;
 
