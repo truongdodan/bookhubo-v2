@@ -99,7 +99,7 @@
                                 }
                                 @if (item.Status == "Completed")
                                 {
-                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                    <a asp-controller="Reviews" asp-action="Create" asp-route-orderItemId="@item.OrderItemId" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-star"></i> Đánh giá
                                     </a>
                                 }
