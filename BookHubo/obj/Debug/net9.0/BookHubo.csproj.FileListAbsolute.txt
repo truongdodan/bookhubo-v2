@@ -112,7 +112,6 @@ D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\Npgsql.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\BookHubo.csproj.AssemblyReference.cache
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\BookHubo.csproj.Up2Date
-D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\compressed\cf5w42skav-n8uqe4uj6h.gz
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\Humanizer.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\Microsoft.Build.Locator.dll
@@ -197,3 +196,4 @@ D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\ru\Microsoft.CodeAna
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\compressed\cf5w42skav-bftguc21bj.gz
