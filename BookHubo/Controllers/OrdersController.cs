@@ -41,12 +41,23 @@ namespace BookHubo.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var order = await _context.Orders
+            var userRole = HttpContext.Session.GetString("UserRole");
+
+            // Admin can view any order, regular users can only view their own orders
+            var query = _context.Orders
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Book)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Seller)
-                .FirstOrDefaultAsync(o => o.OrderId == id && o.BuyerId == userId.Value);
+                .Where(o => o.OrderId == id);
+
+            // If not admin, restrict to buyer's orders only
+            if (userRole != "Admin")
+            {
+                query = query.Where(o => o.BuyerId == userId.Value);
+            }
+
+            var order = await query.FirstOrDefaultAsync();
 
             if (order == null)
             {

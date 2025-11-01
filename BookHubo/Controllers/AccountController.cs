@@ -115,6 +115,13 @@ namespace BookHubo.Controllers
                 return View(model);
             }
 
+            // Check if user is banned
+            if (user.IsBanned)
+            {
+                ModelState.AddModelError("", "Tài khoản của bạn đã bị cấm. Vui lòng liên hệ admin.");
+                return View(model);
+            }
+
             // Đăng nhập thành công, lưu vào session
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserEmail", user.Email);

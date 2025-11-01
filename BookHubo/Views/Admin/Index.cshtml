@@ -52,9 +52,9 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title"><i class="bi bi-people"></i> Quản lý người dùng</h5>
                 <p class="card-text">Xem danh sách và quản lý tất cả người dùng trong hệ thống.</p>
@@ -65,12 +65,24 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
+    <div class="col-md-4">
+        <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title"><i class="bi bi-book"></i> Quản lý sách</h5>
                 <p class="card-text">Xem danh sách và quản lý tất cả sách đang bán.</p>
                 <a asp-action="Listings" class="btn btn-success">
+                    <i class="bi bi-arrow-right-circle"></i> Đến trang quản lý
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-cart"></i> Quản lý đơn hàng</h5>
+                <p class="card-text">Xem danh sách và quản lý tất cả đơn hàng trong hệ thống.</p>
+                <a asp-action="Orders" class="btn btn-warning">
                     <i class="bi bi-arrow-right-circle"></i> Đến trang quản lý
                 </a>
             </div>

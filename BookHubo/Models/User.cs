@@ -44,6 +44,9 @@ namespace BookHubo.Models
         [Column("totalreviews")]
         public int TotalReviews { get; set; } = 0;
 
+        [Column("isbanned")]
+        public bool IsBanned { get; set; } = false;
+
         [Column("createdat")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
