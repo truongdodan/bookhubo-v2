@@ -36,14 +36,6 @@
                                     <li><a class="dropdown-item" asp-controller="Account" asp-action="Stats"><i class="bi bi-graph-up"></i> Thống kê</a></li>
                                 </ul>
                             </li>
-                            @if (Context.Session.GetString("UserRole") == "Admin")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-danger" asp-controller="Admin" asp-action="Index">
-                                        <i class="bi bi-shield-lock"></i> Admin
-                                    </a>
-                                </li>
-                            }
                         }
                     </ul>
                     <ul class="navbar-nav">
@@ -57,6 +49,21 @@
                                     </span>
                                 </a>
                             </li>
+                            @if (Context.Session.GetString("UserRole") == "Admin")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-danger" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-shield-lock"></i> Admin
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Users"><i class="bi bi-people"></i> Người dùng</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Listings"><i class="bi bi-book"></i> Sách</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Orders"><i class="bi bi-cart"></i> Đơn hàng</a></li>
+                                    </ul>
+                                </li>
+                            }
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle"></i> @Context.Session.GetString("UserName")
