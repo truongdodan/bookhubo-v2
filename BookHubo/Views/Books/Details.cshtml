@@ -78,10 +78,10 @@
                     </p>
                 </div>
 
-                <!-- Add to Cart Button (placeholder for later AJAX) -->
+                <!-- Add to Cart Button -->
                 @if (Model.StockQuantity > 0)
                 {
-                    <button type="button" class="btn btn-success btn-lg w-100 mb-2">
+                    <button type="button" class="btn btn-success btn-lg w-100 mb-2" onclick="addToCart(@Model.BookId)">
                         <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
                     </button>
                 }
