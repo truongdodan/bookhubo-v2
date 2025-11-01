@@ -36,6 +36,14 @@
                                     <li><a class="dropdown-item" asp-controller="Account" asp-action="Stats"><i class="bi bi-graph-up"></i> Thống kê</a></li>
                                 </ul>
                             </li>
+                            @if (Context.Session.GetString("UserRole") == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-controller="Admin" asp-action="Index">
+                                        <i class="bi bi-shield-lock"></i> Admin
+                                    </a>
+                                </li>
+                            }
                         }
                     </ul>
                     <ul class="navbar-nav">
