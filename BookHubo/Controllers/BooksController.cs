@@ -252,5 +252,101 @@ namespace BookHubo.Controllers
                 // Ignore errors
             }
         }
+
+        // GET: /Books/Category/{category}
+        public async Task<IActionResult> Category(string category)
+        {
+            var books = await _context.Books
+                .Include(b => b.Seller)
+                .Where(b => b.IsActive && b.Category == category)
+                .OrderByDescending(b => b.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.Category = category;
+            return View(books);
+        }
+
+        // GET: /Books/Search
+        public async Task<IActionResult> Search(string keyword, string category, string condition,
+            decimal? minPrice, decimal? maxPrice, string sortBy = "newest")
+        {
+            IQueryable<Book> query = _context.Books
+                .Include(b => b.Seller)
+                .Where(b => b.IsActive);
+
+            // Search keyword in Title and Author
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(b => b.Title.Contains(keyword) || b.Author.Contains(keyword));
+            }
+
+            // Filter by category
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                query = query.Where(b => b.Category == category);
+            }
+
+            // Filter by condition
+            if (!string.IsNullOrWhiteSpace(condition))
+            {
+                query = query.Where(b => b.Condition == condition);
+            }
+
+            // Filter by price range
+            if (minPrice.HasValue)
+            {
+                query = query.Where(b => b.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(b => b.Price <= maxPrice.Value);
+            }
+
+            // Sort
+            query = sortBy switch
+            {
+                "price-asc" => query.OrderBy(b => b.Price),
+                "price-desc" => query.OrderByDescending(b => b.Price),
+                _ => query.OrderByDescending(b => b.CreatedAt) // newest (default)
+            };
+
+            var books = await query.ToListAsync();
+
+            // Pass search params to view
+            ViewBag.Keyword = keyword;
+            ViewBag.Category = category;
+            ViewBag.Condition = condition;
+            ViewBag.MinPrice = minPrice;
+            ViewBag.MaxPrice = maxPrice;
+            ViewBag.SortBy = sortBy;
+
+            return View(books);
+        }
+
+        // GET: /Books/Details/{id}
+        public async Task<IActionResult> Details(int id)
+        {
+            var book = await _context.Books
+                .Include(b => b.Seller)
+                .FirstOrDefaultAsync(b => b.BookId == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            // Get related books (same category, exclude current)
+            var relatedBooks = await _context.Books
+                .Include(b => b.Seller)
+                .Where(b => b.IsActive && b.Category == book.Category && b.BookId != id)
+                .OrderByDescending(b => b.CreatedAt)
+                .Take(4)
+                .ToListAsync();
+
+            ViewBag.RelatedBooks = relatedBooks;
+
+            return View(book);
+        }
     }
 }

@@ -1,8 +1,102 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model IEnumerable<BookHubo.Models.Book>
+@{
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="bg-primary text-white p-5 rounded text-center">
+            <h1 class="display-4">Chào mừng đến BookHub</h1>
+            <p class="lead">Mua bán sách đã qua sử dụng - Tiết kiệm và Bền vững</p>
+
+            <form asp-controller="Books" asp-action="Search" method="get" class="mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="input-group input-group-lg">
+                            <input type="text" name="keyword" class="form-control" placeholder="Tìm sách theo tên hoặc tác giả...">
+                            <button class="btn btn-warning" type="submit">
+                                <i class="bi bi-search"></i> Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h3>Danh mục sách</h3>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Fiction" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-book"></i> Tiểu thuyết
+            </a>
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Non-Fiction" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-bookmark"></i> Phi tiểu thuyết
+            </a>
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Textbook" class="btn btn-outline-warning btn-sm">
+                <i class="bi bi-journal-text"></i> Sách giáo khoa
+            </a>
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Comics" class="btn btn-outline-info btn-sm">
+                <i class="bi bi-image"></i> Truyện tranh
+            </a>
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Children" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-balloon"></i> Sách thiếu nhi
+            </a>
+            <a asp-controller="Books" asp-action="Category" asp-route-category="Science" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-flask"></i> Khoa học
+            </a>
+            <a asp-controller="Books" asp-action="Search" class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-funnel"></i> Tìm kiếm nâng cao
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h3>Sách mới nhất</h3>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var book in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(book.ImagePath))
+                    {
+                        <img src="@book.ImagePath" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted"><i class="bi bi-person"></i> @book.Author</small><br>
+                            <span class="badge bg-info">@book.Condition</span>
+                        </p>
+                        <p class="text-success fw-bold fs-5">@book.Price.ToString("N0") VNĐ</p>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+        <p class="mt-3">Chưa có sách nào được đăng bán</p>
+    </div>
+}

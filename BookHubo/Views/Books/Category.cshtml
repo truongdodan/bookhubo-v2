@@ -1,0 +1,57 @@
+@model IEnumerable<BookHubo.Models.Book>
+@{
+    ViewData["Title"] = $"Danh mục: {ViewBag.Category}";
+}
+
+<div class="mb-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại trang chủ
+    </a>
+</div>
+
+<div class="mb-4">
+    <h2>Danh mục: @ViewBag.Category</h2>
+    <p class="text-muted">Tìm thấy @Model.Count() cuốn sách</p>
+</div>
+
+@if (Model.Any())
+{
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var book in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(book.ImagePath))
+                    {
+                        <img src="@book.ImagePath" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted"><i class="bi bi-person"></i> @book.Author</small><br>
+                            <span class="badge bg-info">@book.Condition</span>
+                        </p>
+                        <p class="text-success fw-bold fs-5">@book.Price.ToString("N0") VNĐ</p>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+        <p class="mt-3">Không có sách nào trong danh mục này</p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-2">Xem tất cả sách</a>
+    </div>
+}

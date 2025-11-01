@@ -1,0 +1,136 @@
+@model IEnumerable<BookHubo.Models.Book>
+@{
+    ViewData["Title"] = "Tìm kiếm sách";
+}
+
+<div class="mb-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Quay lại trang chủ
+    </a>
+</div>
+
+<h2 class="mb-4">Tìm kiếm sách</h2>
+
+<!-- Advanced Search Form -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Search" method="get">
+            <div class="row g-3">
+                <!-- Keyword -->
+                <div class="col-md-4">
+                    <label class="form-label">Từ khóa</label>
+                    <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control" placeholder="Tên sách hoặc tác giả">
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-4">
+                    <label class="form-label">Danh mục</label>
+                    <select name="category" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option value="Fiction">Tiểu thuyết</option>
+                        <option value="Non-Fiction">Phi tiểu thuyết</option>
+                        <option value="Textbook">Sách giáo khoa</option>
+                        <option value="Comics">Truyện tranh</option>
+                        <option value="Children">Sách thiếu nhi</option>
+                        <option value="Science">Khoa học</option>
+                        <option value="History">Lịch sử</option>
+                        <option value="Biography">Tiểu sử</option>
+                        <option value="Self-Help">Tự giúp bản thân</option>
+                        <option value="Other">Khác</option>
+                    </select>
+                </div>
+
+                <!-- Condition -->
+                <div class="col-md-4">
+                    <label class="form-label">Tình trạng</label>
+                    <select name="condition" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option value="New">Mới</option>
+                        <option value="Like New">Như mới</option>
+                        <option value="Very Good">Rất tốt</option>
+                        <option value="Good">Tốt</option>
+                        <option value="Acceptable">Chấp nhận được</option>
+                    </select>
+                </div>
+
+                <!-- Min Price -->
+                <div class="col-md-4">
+                    <label class="form-label">Giá tối thiểu (VNĐ)</label>
+                    <input type="number" name="minPrice" value="@ViewBag.MinPrice" class="form-control" placeholder="0" step="1000">
+                </div>
+
+                <!-- Max Price -->
+                <div class="col-md-4">
+                    <label class="form-label">Giá tối đa (VNĐ)</label>
+                    <input type="number" name="maxPrice" value="@ViewBag.MaxPrice" class="form-control" placeholder="999999" step="1000">
+                </div>
+
+                <!-- Sort By -->
+                <div class="col-md-4">
+                    <label class="form-label">Sắp xếp</label>
+                    <select name="sortBy" class="form-select">
+                        <option value="newest">Mới nhất</option>
+                        <option value="price-asc">Giá thấp đến cao</option>
+                        <option value="price-desc">Giá cao đến thấp</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Tìm kiếm
+                </button>
+                <a asp-action="Search" class="btn btn-secondary">
+                    <i class="bi bi-arrow-clockwise"></i> Đặt lại
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Search Results -->
+<div class="mb-3">
+    <h3>Kết quả tìm kiếm <span class="text-muted">(@Model.Count() cuốn sách)</span></h3>
+</div>
+
+@if (Model.Any())
+{
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var book in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(book.ImagePath))
+                    {
+                        <img src="@book.ImagePath" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted"><i class="bi bi-person"></i> @book.Author</small><br>
+                            <span class="badge bg-info">@book.Condition</span>
+                        </p>
+                        <p class="text-success fw-bold fs-5">@book.Price.ToString("N0") VNĐ</p>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-search" style="font-size: 3rem;"></i>
+        <p class="mt-3">Không tìm thấy sách nào phù hợp</p>
+        <p class="text-muted">Thử thay đổi điều kiện tìm kiếm</p>
+    </div>
+}
