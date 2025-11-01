@@ -1,0 +1,116 @@
+@model BookHubo.Models.Book
+@{
+    ViewData["Title"] = "Sửa thông tin sách";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sửa thông tin sách</h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="BookId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Author" class="form-label"></label>
+                        <input asp-for="Author" class="form-control" />
+                        <span asp-validation-for="Author" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ISBN" class="form-label"></label>
+                        <input asp-for="ISBN" class="form-control" />
+                        <span asp-validation-for="ISBN" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Category" class="form-label"></label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="Fiction">Fiction (Tiểu thuyết)</option>
+                                <option value="Non-Fiction">Non-Fiction (Phi tiểu thuyết)</option>
+                                <option value="Textbook">Textbook (Sách giáo khoa)</option>
+                                <option value="Comics">Comics (Truyện tranh)</option>
+                                <option value="Children">Children (Sách thiếu nhi)</option>
+                                <option value="Science">Science (Khoa học)</option>
+                                <option value="History">History (Lịch sử)</option>
+                                <option value="Biography">Biography (Tiểu sử)</option>
+                                <option value="Self-Help">Self-Help (Tự giúp bản thân)</option>
+                                <option value="Other">Other (Khác)</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Condition" class="form-label"></label>
+                            <select asp-for="Condition" class="form-select">
+                                <option value="New">New (Mới)</option>
+                                <option value="Like New">Like New (Như mới)</option>
+                                <option value="Very Good">Very Good (Rất tốt)</option>
+                                <option value="Good">Good (Tốt)</option>
+                                <option value="Acceptable">Acceptable (Chấp nhận được)</option>
+                            </select>
+                            <span asp-validation-for="Condition" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Price" class="form-label"></label>
+                            <input asp-for="Price" class="form-control" type="number" step="1000" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="StockQuantity" class="form-label"></label>
+                            <input asp-for="StockQuantity" class="form-control" type="number" />
+                            <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hình ảnh hiện tại</label>
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.ImagePath" alt="Current" style="max-width: 200px;" class="img-thumbnail" />
+                            </div>
+                        }
+                        <input type="file" name="image" class="form-control" accept="image/*" />
+                        <small class="text-muted">Để trống nếu không muốn đổi ảnh</small>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label">Đang bán (Active)</label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,116 @@
+@model IEnumerable<BookHubo.Models.OrderItem>
+@{
+    ViewData["Title"] = "Quản lý bán hàng";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-4">Quản lý bán hàng</h2>
+
+        <!-- Filter by Status -->
+        <div class="btn-group mb-3" role="group">
+            <a asp-action="Index" asp-route-status="all" class="btn btn-outline-primary @(ViewBag.CurrentStatus == "all" ? "active" : "")">
+                Tất cả
+            </a>
+            <a asp-action="Index" asp-route-status="pending" class="btn btn-outline-warning @(ViewBag.CurrentStatus == "pending" ? "active" : "")">
+                Pending
+            </a>
+            <a asp-action="Index" asp-route-status="shipped" class="btn btn-outline-info @(ViewBag.CurrentStatus == "shipped" ? "active" : "")">
+                Shipped
+            </a>
+            <a asp-action="Index" asp-route-status="completed" class="btn btn-outline-success @(ViewBag.CurrentStatus == "completed" ? "active" : "")">
+                Completed
+            </a>
+        </div>
+
+        <!-- Orders Table -->
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Sách</th>
+                            <th>Người mua</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>#@item.OrderId</td>
+                                <td>
+                                    <strong>@item.Book?.Title</strong><br />
+                                    <small class="text-muted">@item.Book?.Author</small>
+                                </td>
+                                <td>
+                                    @item.Order?.Buyer?.FullName<br />
+                                    <small class="text-muted">@item.Order?.Buyer?.Email</small>
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>@item.PriceAtPurchase.ToString("N0") VNĐ</td>
+                                <td>@item.Order?.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning">Pending</span>
+                                    }
+                                    else if (item.Status == "Shipped")
+                                    {
+                                        <span class="badge bg-info">Shipped</span>
+                                    }
+                                    else if (item.Status == "Completed")
+                                    {
+                                        <span class="badge bg-success">Completed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@item.Status</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <form asp-action="MarkAsShipped" asp-route-id="@item.OrderItemId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Đánh dấu đơn hàng này là đã giao?')">
+                                                Đã giao hàng
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (item.Status == "Shipped")
+                                    {
+                                        <span class="text-muted">Đã giao: @item.ShippedAt?.ToString("dd/MM/yyyy")</span>
+                                    }
+                                    else if (item.Status == "Completed")
+                                    {
+                                        <span class="text-success">Hoàn thành</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                @if (ViewBag.CurrentStatus == "all")
+                {
+                    <p>Bạn chưa có đơn hàng nào.</p>
+                }
+                else
+                {
+                    <p>Không có đơn hàng với trạng thái "@ViewBag.CurrentStatus".</p>
+                }
+            </div>
+        }
+    </div>
+</div>
