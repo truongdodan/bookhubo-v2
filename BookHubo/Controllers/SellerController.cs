@@ -28,23 +28,48 @@ namespace BookHubo.Controllers
                 .OrderByDescending(b => b.CreatedAt)
                 .ToListAsync();
 
-            // Get reviews for this seller
+            // Get first 5 reviews for this seller
             var reviews = await _context.Reviews
                 .Include(r => r.Buyer)
-                .Include(r => r.OrderItem)
-                    .ThenInclude(oi => oi!.Book)
+                .Include(r => r.Book)
                 .Where(r => r.SellerId == id)
                 .OrderByDescending(r => r.CreatedAt)
+                .Take(5)
                 .ToListAsync();
 
             var viewModel = new SellerProfileViewModel
             {
                 Seller = seller,
                 Books = books,
-                Reviews = reviews
+                Reviews = reviews,
+                HasMoreReviews = seller.TotalReviews > 5
             };
 
             return View(viewModel);
+        }
+
+        // API: Load more reviews for a seller
+        [HttpGet]
+        public async Task<IActionResult> LoadMoreReviews(int sellerId, int skip = 0, int take = 5)
+        {
+            var reviews = await _context.Reviews
+                .Include(r => r.Buyer)
+                .Include(r => r.Book)
+                .Where(r => r.SellerId == sellerId)
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip(skip)
+                .Take(take)
+                .Select(r => new
+                {
+                    buyerName = r.Buyer!.FullName,
+                    rating = r.Rating,
+                    comment = r.Comment,
+                    bookTitle = r.Book!.Title,
+                    createdAt = r.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                })
+                .ToListAsync();
+
+            return Json(reviews);
         }
     }
 
@@ -53,5 +78,6 @@ namespace BookHubo.Controllers
         public User Seller { get; set; } = null!;
         public List<Book> Books { get; set; } = new();
         public List<Review> Reviews { get; set; } = new();
+        public bool HasMoreReviews { get; set; }
     }
 }

@@ -1,4 +1,7 @@
 @model BookHubo.Models.Review
+@{
+    var showBookTitle = ViewData["ShowBookTitle"] as bool? ?? false;
+}
 
 <div class="card">
     <div class="card-body">
@@ -21,6 +24,15 @@
                 }
             </div>
         </div>
+
+        @if (showBookTitle && Model.Book != null)
+        {
+            <p class="mb-2">
+                <small class="text-muted">
+                    <i class="bi bi-book"></i> Mua sách: <strong>@Model.Book.Title</strong>
+                </small>
+            </p>
+        }
 
         @if (!string.IsNullOrEmpty(Model.Comment))
         {
