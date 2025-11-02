@@ -5,97 +5,69 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2 class="mb-4">Thống kê bán hàng của tôi</h2>
+        <h4 class="mb-4 fw-normal">Thống kê bán hàng của tôi</h4>
 
-        <div class="row g-4">
+        <div class="row g-3 mb-5">
             <!-- Total Active Listings -->
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-primary text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2">Đang bán</h6>
-                                <h2 class="card-title mb-0">@Model.TotalActiveListings</h2>
-                            </div>
-                            <div>
-                                <i class="bi bi-book" style="font-size: 3rem; opacity: 0.5;"></i>
-                            </div>
-                        </div>
+                <div class="card border">
+                    <div class="card-body text-center py-4">
+                        <h4 class="mb-0 fw-bold">@Model.TotalActiveListings</h4>
+                        <p class="text-muted mb-0 small">Đang bán</p>
                     </div>
                 </div>
             </div>
 
             <!-- Total Sold -->
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2">Đã bán</h6>
-                                <h2 class="card-title mb-0">@Model.TotalSold</h2>
-                            </div>
-                            <div>
-                                <i class="bi bi-check-circle" style="font-size: 3rem; opacity: 0.5;"></i>
-                            </div>
-                        </div>
+                <div class="card border">
+                    <div class="card-body text-center py-4">
+                        <h4 class="mb-0 fw-bold">@Model.TotalSold</h4>
+                        <p class="text-muted mb-0 small">Đã bán</p>
                     </div>
                 </div>
             </div>
 
             <!-- Total Revenue -->
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-info text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2">Tổng doanh thu</h6>
-                                <h2 class="card-title mb-0">@Model.TotalRevenue.ToString("N0")</h2>
-                                <small>VNĐ</small>
-                            </div>
-                            <div>
-                                <i class="bi bi-cash-stack" style="font-size: 3rem; opacity: 0.5;"></i>
-                            </div>
-                        </div>
+                <div class="card border">
+                    <div class="card-body text-center py-4">
+                        <h4 class="mb-0 fw-bold">@Model.TotalRevenue.ToString("N0") đ</h4>
+                        <p class="text-muted mb-0 small">Tổng doanh thu</p>
                     </div>
                 </div>
             </div>
 
             <!-- Average Rating -->
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-warning text-dark">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2">Đánh giá TB</h6>
-                                <h2 class="card-title mb-0">@Model.AverageRating.ToString("0.0")</h2>
-                                <small>(@Model.TotalReviews đánh giá)</small>
-                            </div>
-                            <div>
-                                <i class="bi bi-star-fill" style="font-size: 3rem; opacity: 0.5;"></i>
-                            </div>
-                        </div>
+                <div class="card border">
+                    <div class="card-body text-center py-4">
+                        <h4 class="mb-0 fw-bold">@Model.AverageRating.ToString("0.0")</h4>
+                        <p class="text-muted mb-0 small">Đánh giá TB (@Model.TotalReviews)</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Additional Info -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="card-title">Thông tin chi tiết</h5>
+        <div class="card border">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-normal">Thông tin chi tiết</h6>
+            </div>
+            <div class="card-body p-4">
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Sách đang bán:</strong> @Model.TotalActiveListings cuốn</p>
-                        <p><strong>Tổng số sách đã bán:</strong> @Model.TotalSold cuốn</p>
+                        <p class="mb-2"><small><span class="fw-normal">Sách đang bán:</span> @Model.TotalActiveListings cuốn</small></p>
+                        <p class="mb-2"><small><span class="fw-normal">Tổng số sách đã bán:</span> @Model.TotalSold cuốn</small></p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Tổng doanh thu:</strong> @Model.TotalRevenue.ToString("N0") VNĐ</p>
-                        <p><strong>Đánh giá trung bình:</strong> @Model.AverageRating.ToString("0.0")/5.0 (@Model.TotalReviews lượt đánh giá)</p>
+                        <p class="mb-2"><small><span class="fw-normal">Tổng doanh thu:</span> @Model.TotalRevenue.ToString("N0") đ</small></p>
+                        <p class="mb-2"><small><span class="fw-normal">Đánh giá trung bình:</span> @Model.AverageRating.ToString("0.0")/5.0 (@Model.TotalReviews lượt)</small></p>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <a asp-controller="Books" asp-action="Index" class="btn btn-primary">Quản lý sách của tôi</a>
-                    <a asp-controller="Sales" asp-action="Index" class="btn btn-success">Quản lý đơn hàng</a>
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-dark me-2">Quản lý sách của tôi</a>
+                    <a asp-controller="Sales" asp-action="Index" class="btn btn-outline-dark">Quản lý đơn hàng</a>
                 </div>
             </div>
         </div>

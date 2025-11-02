@@ -29,3 +29,10 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Book card hover effect */
+.card[style*="cursor: pointer"]:hover {
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}

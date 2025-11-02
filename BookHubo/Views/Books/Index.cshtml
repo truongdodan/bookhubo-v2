@@ -6,41 +6,41 @@
 <div class="row">
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Sách của tôi</h2>
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Đăng sách mới
+            <h4 class="fw-normal">Sách của tôi</h4>
+            <a asp-action="Create" class="btn btn-dark">
+                Đăng sách mới
             </a>
         </div>
 
         <!-- Quick Stats -->
-        <div class="row mb-4">
+        <div class="row mb-4 g-3">
             <div class="col-md-6">
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <h5>Đang bán</h5>
-                        <h2>@ViewBag.TotalActive</h2>
+                <div class="card border">
+                    <div class="card-body text-center py-3">
+                        <h4 class="mb-0 fw-bold">@ViewBag.TotalActive</h4>
+                        <p class="text-muted mb-0 small">Đang bán</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card bg-secondary text-white">
-                    <div class="card-body">
-                        <h5>Đã bán/Ẩn</h5>
-                        <h2>@ViewBag.TotalSold</h2>
+                <div class="card border">
+                    <div class="card-body text-center py-3">
+                        <h4 class="mb-0 fw-bold">@ViewBag.TotalSold</h4>
+                        <p class="text-muted mb-0 small">Đã bán/Ẩn</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Filter -->
-        <div class="btn-group mb-3" role="group">
-            <a asp-action="Index" asp-route-filter="all" class="btn btn-outline-primary @(ViewBag.CurrentFilter == "all" ? "active" : "")">
+        <div class="btn-group mb-4" role="group">
+            <a asp-action="Index" asp-route-filter="all" class="btn btn-light border @(ViewBag.CurrentFilter == "all" ? "active" : "")">
                 Tất cả
             </a>
-            <a asp-action="Index" asp-route-filter="active" class="btn btn-outline-success @(ViewBag.CurrentFilter == "active" ? "active" : "")">
+            <a asp-action="Index" asp-route-filter="active" class="btn btn-light border @(ViewBag.CurrentFilter == "active" ? "active" : "")">
                 Đang bán
             </a>
-            <a asp-action="Index" asp-route-filter="sold" class="btn btn-outline-secondary @(ViewBag.CurrentFilter == "sold" ? "active" : "")">
+            <a asp-action="Index" asp-route-filter="sold" class="btn btn-light border @(ViewBag.CurrentFilter == "sold" ? "active" : "")">
                 Đã bán/Ẩn
             </a>
         </div>
@@ -48,42 +48,42 @@
         <!-- Books Grid -->
         @if (Model.Any())
         {
-            <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
                 @foreach (var book in Model)
                 {
                     <div class="col">
-                        <div class="card h-100 @(!book.IsActive ? "opacity-75" : "")">
+                        <div class="card h-100 border @(!book.IsActive ? "opacity-75" : "")">
                             @if (!string.IsNullOrEmpty(book.ImagePath))
                             {
-                                <img src="@book.ImagePath" class="card-img-top" alt="@book.Title" style="height: 250px; object-fit: cover;">
+                                <img src="@book.ImagePath" class="card-img-top" alt="@book.Title" style="height: 200px; object-fit: cover;">
                             }
                             else
                             {
-                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
-                                    <span class="text-muted">Không có ảnh</span>
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="bi bi-book text-secondary" style="font-size: 3rem;"></i>
                                 </div>
                             }
-                            <div class="card-body">
-                                <h5 class="card-title">@book.Title</h5>
-                                <p class="card-text">
-                                    <strong>Tác giả:</strong> @book.Author<br />
-                                    <strong>Tình trạng:</strong> @book.Condition<br />
-                                    <strong>Giá:</strong> @book.Price.ToString("N0") VNĐ<br />
-                                    <strong>Số lượng:</strong> @book.StockQuantity<br />
+                            <div class="card-body p-3">
+                                <h6 class="card-title fw-normal mb-2">@book.Title</h6>
+                                <p class="card-text small">
+                                    <span class="text-muted">@book.Author</span><br />
+                                    <span class="text-muted">@book.Condition</span><br />
+                                    <span class="fw-bold">@book.Price.ToString("N0") đ</span><br />
+                                    <span class="text-muted">Còn: @book.StockQuantity</span><br />
                                     @if (!book.IsActive)
                                     {
-                                        <span class="badge bg-secondary">Đã ẩn</span>
+                                        <span class="badge bg-dark mt-1">Đã ẩn</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success">Đang bán</span>
+                                        <span class="badge bg-light text-dark border mt-1">Đang bán</span>
                                     }
                                 </p>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer bg-white border-top">
                                 <div class="btn-group w-100" role="group">
-                                    <a asp-action="Edit" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-primary">Sửa</a>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(@book.BookId)">Xóa</button>
+                                    <a asp-action="Edit" asp-route-id="@book.BookId" class="btn btn-sm btn-light border">Sửa</a>
+                                    <button type="button" class="btn btn-sm btn-light border" onclick="confirmDelete(@book.BookId)">Xóa</button>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +93,8 @@
         }
         else
         {
-            <div class="alert alert-info">
-                Bạn chưa có sách nào. <a asp-action="Create">Đăng sách đầu tiên!</a>
+            <div class="text-center py-5">
+                <p class="text-muted">Bạn chưa có sách nào. <a asp-action="Create" class="text-dark">Đăng sách đầu tiên!</a></p>
             </div>
         }
     </div>

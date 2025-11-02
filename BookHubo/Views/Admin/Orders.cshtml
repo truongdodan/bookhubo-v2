@@ -3,50 +3,50 @@
     ViewData["Title"] = "Quản lý đơn hàng";
 }
 
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Quay lại Dashboard
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-light border">
+        ← Dashboard
     </a>
 </div>
 
-<div class="card">
-    <div class="card-header bg-warning text-white">
-        <h4 class="mb-0"><i class="bi bi-cart"></i> Quản lý đơn hàng</h4>
+<div class="card border">
+    <div class="card-header bg-white border-bottom">
+        <h5 class="mb-0 fw-normal">Quản lý đơn hàng</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <!-- Search and Filter Form -->
         <form method="get" class="row g-3 mb-4">
             <div class="col-md-6">
-                <label class="form-label">Tìm kiếm</label>
-                <input type="text" name="search" class="form-control" placeholder="Mã đơn hàng, tên hoặc email người mua..." value="@ViewBag.SearchQuery">
+                <label class="form-label small">Tìm kiếm</label>
+                <input type="text" name="search" class="form-control" placeholder="Mã đơn hàng, tên hoặc email..." value="@ViewBag.SearchQuery">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Trạng thái</label>
+                <label class="form-label small">Trạng thái</label>
                 <select name="status" class="form-select">
-                    <option value="">Tất cả trạng thái</option>
+                    <option value="">Tất cả</option>
                     <option value="Pending" selected="@(ViewBag.StatusFilter == "Pending")">Chờ xử lý</option>
                     <option value="Completed" selected="@(ViewBag.StatusFilter == "Completed")">Hoàn thành</option>
                     <option value="Cancelled" selected="@(ViewBag.StatusFilter == "Cancelled")">Đã hủy</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i> Tìm
+                <button type="submit" class="btn btn-dark w-100">
+                    Tìm
                 </button>
             </div>
         </form>
 
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
+            <table class="table align-middle">
+                <thead class="border-bottom">
                     <tr>
-                        <th>Mã ĐH</th>
-                        <th>Người mua</th>
-                        <th>Số sản phẩm</th>
-                        <th>Tổng tiền</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th class="text-center">Hành động</th>
+                        <th class="border-0 fw-normal"><small>Mã ĐH</small></th>
+                        <th class="border-0 fw-normal"><small>Người mua</small></th>
+                        <th class="border-0 fw-normal"><small>Số sản phẩm</small></th>
+                        <th class="border-0 fw-normal"><small>Tổng tiền</small></th>
+                        <th class="border-0 fw-normal"><small>Trạng thái</small></th>
+                        <th class="border-0 fw-normal"><small>Ngày tạo</small></th>
+                        <th class="text-center border-0 fw-normal"><small>Hành động</small></th>
                     </tr>
                 </thead>
                 <tbody>

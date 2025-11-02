@@ -3,27 +3,27 @@
     ViewData["Title"] = "Quản lý sách";
 }
 
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Quay lại Dashboard
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-light border">
+        ← Dashboard
     </a>
 </div>
 
-<div class="card">
-    <div class="card-header bg-success text-white">
-        <h4 class="mb-0"><i class="bi bi-book"></i> Quản lý sách</h4>
+<div class="card border">
+    <div class="card-header bg-white border-bottom">
+        <h5 class="mb-0 fw-normal">Quản lý sách</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <!-- Search and Filter Form -->
         <form method="get" class="row g-3 mb-4">
             <div class="col-md-4">
-                <label class="form-label">Tìm kiếm</label>
+                <label class="form-label small">Tìm kiếm</label>
                 <input type="text" name="search" class="form-control" placeholder="Tiêu đề hoặc tác giả..." value="@ViewBag.SearchQuery">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Thể loại</label>
+                <label class="form-label small">Thể loại</label>
                 <select name="category" class="form-select">
-                    <option value="">Tất cả thể loại</option>
+                    <option value="">Tất cả</option>
                     <option value="Tiểu thuyết" selected="@(ViewBag.CategoryFilter == "Tiểu thuyết")">Tiểu thuyết</option>
                     <option value="Viễn tưởng" selected="@(ViewBag.CategoryFilter == "Viễn tưởng")">Viễn tưởng</option>
                     <option value="Giáo khoa" selected="@(ViewBag.CategoryFilter == "Giáo khoa")">Giáo khoa</option>
@@ -31,31 +31,31 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Trạng thái</label>
+                <label class="form-label small">Trạng thái</label>
                 <select name="status" class="form-select">
-                    <option value="">Tất cả trạng thái</option>
+                    <option value="">Tất cả</option>
                     <option value="Active" selected="@(ViewBag.StatusFilter == "Active")">Đang bán</option>
                     <option value="Deleted" selected="@(ViewBag.StatusFilter == "Deleted")">Đã xóa</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i> Tìm
+                <button type="submit" class="btn btn-dark w-100">
+                    Tìm
                 </button>
             </div>
         </form>
 
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
+            <table class="table align-middle">
+                <thead class="border-bottom">
                     <tr>
-                        <th>ID</th>
-                        <th>Tiêu đề</th>
-                        <th>Người bán</th>
-                        <th>Giá</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th class="text-center">Hành động</th>
+                        <th class="border-0 fw-normal"><small>ID</small></th>
+                        <th class="border-0 fw-normal"><small>Tiêu đề</small></th>
+                        <th class="border-0 fw-normal"><small>Người bán</small></th>
+                        <th class="border-0 fw-normal"><small>Giá</small></th>
+                        <th class="border-0 fw-normal"><small>Trạng thái</small></th>
+                        <th class="border-0 fw-normal"><small>Ngày tạo</small></th>
+                        <th class="text-center border-0 fw-normal"><small>Hành động</small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,32 +64,32 @@
                         <tr id="listing-row-@book.BookId">
                             <td>@book.BookId</td>
                             <td>
-                                <strong>@book.Title</strong><br>
+                                <strong class="fw-normal">@book.Title</strong><br>
                                 <small class="text-muted">@book.Author</small>
                             </td>
-                            <td>@book.Seller?.FullName</td>
-                            <td>@book.Price.ToString("N0") VNĐ</td>
+                            <td><small>@book.Seller?.FullName</small></td>
+                            <td>@book.Price.ToString("N0") đ</td>
                             <td>
                                 @if (book.IsActive)
                                 {
-                                    <span class="badge bg-success">Đang bán</span>
+                                    <span class="badge bg-light text-dark border">Đang bán</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Đã xóa</span>
+                                    <span class="badge bg-dark">Đã xóa</span>
                                 }
                             </td>
-                            <td>@book.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            <td><small>@book.CreatedAt.ToString("dd/MM/yyyy")</small></td>
                             <td class="text-center">
                                 @if (book.IsActive)
                                 {
-                                    <button class="btn btn-sm btn-danger" onclick="deleteListing(@book.BookId, '@book.Title')">
-                                        <i class="bi bi-trash"></i> Xóa
+                                    <button class="btn btn-sm btn-light border" onclick="deleteListing(@book.BookId, '@book.Title')">
+                                        Xóa
                                     </button>
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Đã xóa</span>
+                                    <span class="text-muted"><small>Đã xóa</small></span>
                                 }
                             </td>
                         </tr>
@@ -100,8 +100,8 @@
 
         @if (!Model.Any())
         {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Không có sách nào
+            <div class="text-muted text-center py-4">
+                <small>Không có sách nào</small>
             </div>
         }
     </div>

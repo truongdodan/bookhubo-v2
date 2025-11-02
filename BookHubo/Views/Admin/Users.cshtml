@@ -3,49 +3,49 @@
     ViewData["Title"] = "Quản lý người dùng";
 }
 
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Quay lại Dashboard
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-light border">
+        ← Dashboard
     </a>
 </div>
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"><i class="bi bi-people"></i> Quản lý người dùng</h4>
+<div class="card border">
+    <div class="card-header bg-white border-bottom">
+        <h5 class="mb-0 fw-normal">Quản lý người dùng</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <!-- Search and Filter Form -->
         <form method="get" class="row g-3 mb-4">
             <div class="col-md-6">
-                <label class="form-label">Tìm kiếm</label>
-                <input type="text" name="search" class="form-control" placeholder="Email hoặc tên người dùng..." value="@ViewBag.SearchQuery">
+                <label class="form-label small">Tìm kiếm</label>
+                <input type="text" name="search" class="form-control" placeholder="Email hoặc tên..." value="@ViewBag.SearchQuery">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Vai trò</label>
+                <label class="form-label small">Vai trò</label>
                 <select name="role" class="form-select">
-                    <option value="">Tất cả vai trò</option>
+                    <option value="">Tất cả</option>
                     <option value="User" selected="@(ViewBag.RoleFilter == "User")">User</option>
                     <option value="Admin" selected="@(ViewBag.RoleFilter == "Admin")">Admin</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i> Tìm
+                <button type="submit" class="btn btn-dark w-100">
+                    Tìm
                 </button>
             </div>
         </form>
 
         <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
+            <table class="table align-middle">
+                <thead class="border-bottom">
                     <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Họ tên</th>
-                        <th>Vai trò</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th class="text-center">Hành động</th>
+                        <th class="border-0 fw-normal"><small>ID</small></th>
+                        <th class="border-0 fw-normal"><small>Email</small></th>
+                        <th class="border-0 fw-normal"><small>Họ tên</small></th>
+                        <th class="border-0 fw-normal"><small>Vai trò</small></th>
+                        <th class="border-0 fw-normal"><small>Trạng thái</small></th>
+                        <th class="border-0 fw-normal"><small>Ngày tạo</small></th>
+                        <th class="text-center border-0 fw-normal"><small>Hành động</small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,16 +53,16 @@
                     {
                         <tr id="user-row-@user.UserId">
                             <td>@user.UserId</td>
-                            <td>@user.Email</td>
-                            <td>@user.FullName</td>
+                            <td><small>@user.Email</small></td>
+                            <td><small>@user.FullName</small></td>
                             <td>
                                 @if (user.Role == "Admin")
                                 {
-                                    <span class="badge bg-danger">@user.Role</span>
+                                    <span class="badge bg-dark">@user.Role</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">@user.Role</span>
+                                    <span class="badge bg-light text-dark border">@user.Role</span>
                                 }
                             </td>
                             <td id="user-status-@user.UserId">
@@ -72,32 +72,32 @@
                                 }
                                 else
                                 {
-                                    <span class="badge bg-success">Hoạt động</span>
+                                    <span class="badge bg-light text-dark border">Hoạt động</span>
                                 }
                             </td>
-                            <td>@user.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            <td><small>@user.CreatedAt.ToString("dd/MM/yyyy")</small></td>
                             <td class="text-center" id="user-actions-@user.UserId">
                                 @if (user.Role != "Admin")
                                 {
                                     @if (user.IsBanned)
                                     {
-                                        <button class="btn btn-sm btn-success" onclick="unbanUser(@user.UserId, '@user.Email')">
-                                            <i class="bi bi-check-circle"></i> Gỡ cấm
+                                        <button class="btn btn-sm btn-light border" onclick="unbanUser(@user.UserId, '@user.Email')">
+                                            Gỡ cấm
                                         </button>
                                     }
                                     else
                                     {
-                                        <button class="btn btn-sm btn-warning" onclick="banUser(@user.UserId, '@user.Email')">
-                                            <i class="bi bi-ban"></i> Cấm
+                                        <button class="btn btn-sm btn-light border" onclick="banUser(@user.UserId, '@user.Email')">
+                                            Cấm
                                         </button>
                                     }
-                                    <button class="btn btn-sm btn-danger" onclick="deleteUser(@user.UserId, '@user.Email')">
-                                        <i class="bi bi-trash"></i> Xóa
+                                    <button class="btn btn-sm btn-light border" onclick="deleteUser(@user.UserId, '@user.Email')">
+                                        Xóa
                                     </button>
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Admin</span>
+                                    <span class="text-muted"><small>Admin</small></span>
                                 }
                             </td>
                         </tr>
@@ -108,8 +108,8 @@
 
         @if (!Model.Any())
         {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Không có người dùng nào
+            <div class="text-muted text-center py-4">
+                <small>Không có người dùng nào</small>
             </div>
         }
     </div>
