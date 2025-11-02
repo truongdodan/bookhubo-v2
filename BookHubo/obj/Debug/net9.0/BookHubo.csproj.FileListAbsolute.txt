@@ -198,3 +198,4 @@ D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\zh-Hant\Microsoft.Co
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\compressed\cf5w42skav-bftguc21bj.gz
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\compressed\zc17ygex7u-10j8wufhcj.gz
 D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\obj\Debug\net9.0\compressed\4atios03dh-u2hxk3a9xx.gz
+D:\Work\UniWork\AdvancedWeb\baov2\BookHubo\bin\Debug\net9.0\appsettings.Example.json
